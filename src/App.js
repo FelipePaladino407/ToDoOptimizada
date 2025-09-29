@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import TaskForm from './taskForm';
+import TaskForm from './components/taskForm';
 import React from 'react';
 import { useState } from 'react';
 
@@ -16,8 +16,7 @@ function App() {
       <header className="App-header">
         <h1>Lista de Tareas</h1>
         <TaskForm onAddTask={handleAddTask} />
-        
-        {/* Mostrar las tareas */}
+
         <div className="tasks-list">
           {tasks.map(task => (
             <div key={task.id} className="task-item">
