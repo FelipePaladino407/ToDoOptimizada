@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
-import './App.css';
-import TaskForm from './components/taskForm';
+reto1
+import { useState, useMemo } from "react";
+import TaskForm from "./TaskForm";
+import TaskList from "./TaskList";
 
-function App() {
-  const [tasks, setTasks] = useState([]);
+export default function App() {
+    const [tasks, setTasks] = useState([
+    { id: 1, text: "Estudiar React", completed: false, priority: "alta" },
+    { id: 2, text: "Comprar pan", completed: true, priority: "baja" },
+    { id: 3, text: "Jugar LoL", completed: false, priority: "alta" },
+  ]);
 
-  const handleAddTask = (newTask) => {
-    setTasks([...tasks, newTask]);
-  };
+    const pendingCount = useMemo(() => {
+      return tasks.filter((task) => !task.completed).length; }, [tasks]);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Lista de Tareas</h1>
+    const HighPriority = useMemo(() => {
+      return tasks.filter((task) => task.priority === "alta")
+    }, [tasks]);
+
+    const addTask = (text, priority) => {
+      const newTask = {
+        id: Date.now(),
+        text,
+        completed: false,
+        priority,
+      };
+      setTask([...tasks, newTask]);
+    };
+
+    const deleteTask = (id) => {
+      setTasks(tasks.filter((task) => task.id !== id));
+    };
+
+    return (
+      <div>
+        <h1> list</h1>
         <TaskForm onAddTask={handleAddTask} />
 
         <div className="tasks-list">
@@ -21,11 +42,19 @@ function App() {
               <span>{task.text}</span>
               <small>{new Date(task.createdAt).toLocaleString()}</small>
             </div>
-          ))}
-        </div>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+
+        <h3>Tareas pendientes {pendingCount}</h3>
+        <TaskList tasks={tasks} toggleTask={toggleTask} deleteTask={deleteTask} />
+        <h2>Solo alta prioridad</h2>
+        <TaskList
+          tasks={highPriorityTasks}
+          toggleTask={toggleTask}
+          deleteTask={deleteTask}
+        />
+
+
+      </div>
+    )
+export default App
+}
