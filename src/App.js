@@ -1,8 +1,6 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 import TaskForm from './components/taskForm';
-import React from 'react';
-import { useState } from 'react';
 
 function App() {
   const [tasks, setTasks] = useState([]);
