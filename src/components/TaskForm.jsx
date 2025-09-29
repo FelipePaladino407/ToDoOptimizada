@@ -1,8 +1,8 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const TaskForm = ({ onAddTask }) => {
     const [task, setTask] = useState('');
+    const [priority, setPriority] = useState('baja');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -11,37 +11,42 @@ const TaskForm = ({ onAddTask }) => {
                 id: Date.now(),
                 text: task.trim(),
                 completed: false,
+                priority: priority,
                 createdAt: new Date().toISOString()
             });
-            setTask('')
+            setTask('');
+            setPriority('baja');
         }
     };
 
-    const handleChange = (e) => {
-        setTask(e.target.value);
-    };
-
-    return(
-        <form onSubmit={handleSubmit} className="task-form">
-            <div className="form-group">
+    return (
+        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <input
                     type="text"
                     value={task}
-                    onChange={handleChange}
-                    placeholder="Escribir tarea"
-                    className="task-input"
-                    maxLength={200}
+                    onChange={(e) => setTask(e.target.value)}
+                    placeholder="Escribir nueva tarea..."
+                    style={{ padding: '8px', flex: 1 }}
                 />
+                <select 
+                    value={priority} 
+                    onChange={(e) => setPriority(e.target.value)}
+                    style={{ padding: '8px' }}
+                >
+                    <option value="baja">Baja</option>
+                    <option value="alta">Alta</option>
+                </select>
                 <button
                     type="submit"
-                    className="add-button"
                     disabled={!task.trim()}
+
                 >
-                    Agregar Tarea
+                    Agregar
                 </button>
             </div>
         </form>
     );
-};  
+};
 
 export default TaskForm;

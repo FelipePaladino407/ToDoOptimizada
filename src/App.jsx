@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
-import TaskForm from "./TaskForm";
-import TaskList from "./TaskList";
+import React, { useState, useMemo } from "react";
+import TaskForm from "./components/TaskForm.jsx";
+import TaskList from "./components/TaskList.jsx";
 
-export default function App() {
+function App() {
     const [tasks, setTasks] = useState([
         { id: 1, text: "Estudiar React", completed: false, priority: "alta", createdAt: new Date().toISOString() },
         { id: 2, text: "Comprar pan", completed: true, priority: "baja", createdAt: new Date().toISOString() },
@@ -20,11 +20,9 @@ export default function App() {
     );
 
     const addTask = (newTask) => {
-        if (!newTask.priority) newTask.priority = "baja";
         setTasks([...tasks, newTask]);
     };
 
-    // Marcar completada/desmarcar
     const toggleTask = (id) => {
         setTasks(
             tasks.map(task =>
@@ -38,7 +36,7 @@ export default function App() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
             <h1>To-Do List Optimizada</h1>
 
             <TaskForm onAddTask={addTask} />
@@ -46,7 +44,7 @@ export default function App() {
             <h3>Tareas pendientes: {pendingCount}</h3>
 
             <h2>Lista completa</h2>
-            <TaskList
+            {/* <TaskList
                 tasks={tasks}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
@@ -57,7 +55,9 @@ export default function App() {
                 tasks={highPriorityTasks}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
-            />
+            /> */}
         </div>
     );
 }
+
+export default App;
