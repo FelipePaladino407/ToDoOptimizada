@@ -1,3 +1,4 @@
+reto1
 import { useState, useMemo } from "react";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
@@ -33,7 +34,16 @@ export default function App() {
     return (
       <div>
         <h1> list</h1>
-        <TaskForm>add Task={addTask}</TaskForm>
+        <TaskForm onAddTask={handleAddTask} />
+
+        <div className="tasks-list">
+          {tasks.map(task => (
+            <div key={task.id} className="task-item">
+              <span>{task.text}</span>
+              <small>{new Date(task.createdAt).toLocaleString()}</small>
+            </div>
+
+
         <h3>Tareas pendientes {pendingCount}</h3>
         <TaskList tasks={tasks} toggleTask={toggleTask} deleteTask={deleteTask} />
         <h2>Solo alta prioridad</h2>
@@ -46,9 +56,5 @@ export default function App() {
 
       </div>
     )
-
-
-
-
-
+export default App
 }
