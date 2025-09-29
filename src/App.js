@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useMemo } from "react";
+import TaskForm from "./TaskForm";
+import TaskList from "./TaskList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+    const [tasks, setTasks] = useState([
+    { id: 1, text: "Estudiar React", completed: false, priority: "alta" },
+    { id: 2, text: "Comprar pan", completed: true, priority: "baja" },
+    { id: 3, text: "Jugar LoL", completed: false, priority: "alta" },
+  ]);
+
+    const pendingCount = useMemo(() => {
+      return tasks.filter((task) => !task.completed).length; }, [tasks]);
+
+    const HighPriority = useMemo(() => {
+      return tasks.filter((task) => task.priority === "alta")
+    }, [tasks]);
+
+    const addTask = (text, priority) => {
+      const newTask = {
+        id: Date.now(),
+        text,
+        completed: false,
+        priority,
+      };
+      setTask([...tasks, newTask]);
+    };
+
+    const deleteTask = (id) => {
+      setTasks(tasks.filter((task) => task.id !== id));
+    };
+
+    return (
+      <div>
+        <h1> list</h1>
+        <TaskForm>add Task={addTask}</TaskForm>
+        <h3>Tareas pendientes {pendingCount}</h3>
+        <TaskList tasks={tasks} toggleTask={toggleTask} deleteTask={deleteTask} />
+        <h2>Solo alta prioridad</h2>
+        <TaskList
+          tasks={highPriorityTasks}
+          toggleTask={toggleTask}
+          deleteTask={deleteTask}
+        />
+
+
+      </div>
+    )
+
+
+
+
+
 }
-
-export default App;
