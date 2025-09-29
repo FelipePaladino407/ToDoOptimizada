@@ -42,6 +42,8 @@ export default function App() {
               <span>{task.text}</span>
               <small>{new Date(task.createdAt).toLocaleString()}</small>
             </div>
+          ))}
+        </div>
 
 
         <h3>Tareas pendientes {pendingCount}</h3>
@@ -56,5 +58,4 @@ export default function App() {
 
       </div>
     )
-export default App
 }
