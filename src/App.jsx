@@ -44,7 +44,7 @@ function App() {
             <h3>Tareas pendientes: {pendingCount}</h3>
 
             <h2>Lista completa</h2>
-            {/* <TaskList
+            <TaskList
                 tasks={tasks}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
@@ -55,7 +55,7 @@ function App() {
                 tasks={highPriorityTasks}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
-            /> */}
+            /> 
         </div>
     );
 }
