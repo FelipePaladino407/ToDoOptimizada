@@ -9,7 +9,6 @@ export function DisplayModeProvider({ children }) {
     const toggleMode = useCallback(() => setMode((m) => (m === "detailed" ? "compact" : "detailed")), []);
 
 
-// Memorizar el value para evitar renders innecesarios de consumidores
     const value = useMemo(() => ({ mode, toggleMode }), [mode, toggleMode]);
     return <DisplayModeContext.Provider value={value}>{children}</DisplayModeContext.Provider>;
 }

@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import TaskForm from "./components/TaskForm.jsx";
 import TaskList from "./components/TaskList.jsx";
+import { DisplayModeProvider, useDisplayMode } from "./context/DisplayModeContext.jsx";
 
-function App() {
+function AppContent() {
+    const { mode, toggleMode } = useDisplayMode();
     const [tasks, setTasks] = useState([
         { id: 1, text: "Estudiar React", completed: false, priority: "alta", createdAt: new Date().toISOString() },
         { id: 2, text: "Comprar pan", completed: true, priority: "baja", createdAt: new Date().toISOString() },
@@ -23,21 +25,26 @@ function App() {
         setTasks([...tasks, newTask]);
     };
 
-    const toggleTask = (id) => {
-        setTasks(
-            tasks.map(task =>
+    const toggleTask = useCallback((id) => {
+        setTasks(prevTasks =>
+            prevTasks.map(task => 
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
-    };
+    }, []);
 
-    const deleteTask = (id) => {
-        setTasks(tasks.filter(task => task.id !== id));
-    };
+    const deleteTask = useCallback((id) => {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+    }, []);
 
     return (
-        <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-            <h1>To-Do List Optimizada</h1>
+        <div>
+            <div>
+                <h1>To-Do List Optimizada</h1>
+                <button onClick={toggleMode}>
+                    Modo: {mode === 'compact' ? 'Compacto' : 'Detallado'}
+                </button>
+            </div>
 
             <TaskForm onAddTask={addTask} />
 
@@ -57,6 +64,14 @@ function App() {
                 deleteTask={deleteTask}
             /> 
         </div>
+    );
+}
+
+function App() {
+    return (
+        <DisplayModeProvider>
+            <AppContent />
+        </DisplayModeProvider>
     );
 }
 

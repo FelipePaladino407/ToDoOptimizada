@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const TaskForm = ({ onAddTask }) => {
     const [task, setTask] = useState('');
     const [priority, setPriority] = useState('baja');
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,23 +21,23 @@ const TaskForm = ({ onAddTask }) => {
             });
             setTask('');
             setPriority('baja');
+            setTimeout(() => inputRef.current?.focus(), 0);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <form onSubmit={handleSubmit}>
+            <div>
                 <input
+                    ref={inputRef}
                     type="text"
                     value={task}
                     onChange={(e) => setTask(e.target.value)}
                     placeholder="Escribir nueva tarea..."
-                    style={{ padding: '8px', flex: 1 }}
                 />
                 <select 
                     value={priority} 
                     onChange={(e) => setPriority(e.target.value)}
-                    style={{ padding: '8px' }}
                 >
                     <option value="baja">Baja</option>
                     <option value="alta">Alta</option>
@@ -40,7 +45,6 @@ const TaskForm = ({ onAddTask }) => {
                 <button
                     type="submit"
                     disabled={!task.trim()}
-
                 >
                     Agregar
                 </button>
