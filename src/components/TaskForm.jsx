@@ -1,52 +1,46 @@
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const TaskForm = ({ onAddTask }) => {
-    const [task, setTask] = useState('');
-    const [priority, setPriority] = useState('baja');
+export default function TaskForm({ onAdd }) {
+    const [text, setText] = useState("");
+    const [high, setHigh] = useState(false);
+    const inputRef = useRef(null);
+
+    // useRef + focus al montar y tras agregar el semejanete infame este:
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (task.trim()) {
-            onAddTask({
-                id: Date.now(),
-                text: task.trim(),
-                completed: false,
-                priority: priority,
-                createdAt: new Date().toISOString()
-            });
-            setTask('');
-            setPriority('baja');
-        }
+        const trimmed = text.trim();
+        if (!trimmed) return;
+        onAdd(trimmed, high);
+        setText("");
+        setHigh(false);
+
+        inputRef.current?.focus();
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <form className="task-form" onSubmit={handleSubmit}>
+            <input
+                ref={inputRef}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Nueva tarea..."
+                maxLength={200}
+            />
+            <label className="checkbox">
                 <input
-                    type="text"
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
-                    placeholder="Escribir nueva tarea..."
-                    style={{ padding: '8px', flex: 1 }}
+                    type="checkbox"
+                    checked={high}
+                    onChange={(e) => setHigh(e.target.checked)}
                 />
-                <select 
-                    value={priority} 
-                    onChange={(e) => setPriority(e.target.value)}
-                    style={{ padding: '8px' }}
-                >
-                    <option value="baja">Baja</option>
-                    <option value="alta">Alta</option>
-                </select>
-                <button
-                    type="submit"
-                    disabled={!task.trim()}
-
-                >
-                    Agregar
-                </button>
-            </div>
+                Alta prioridad
+            </label>
+            <button className="btn" type="submit" disabled={!text.trim()}>
+                Agregar
+            </button>
         </form>
     );
-};
-
-export default TaskForm;
+}

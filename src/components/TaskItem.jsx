@@ -1,47 +1,38 @@
-import React from "react";
-import PropTypes from "prop-types";
+import { memo, useMemo } from "react";
 import { useDisplayMode } from "../context/DisplayModeContext.jsx";
 
-function TaskItemBase({ id, title, completed, priority, createdAt, onComplete, onDelete }) {
+function TaskItemBase({ task, onToggleComplete, onDelete }) {
     const { mode } = useDisplayMode();
 
+    const className = useMemo(() => {
+        const base = "task-item";
+        const done = task.completed ? " done" : "";
+        const priority = task.high ? " high" : "";
+        const density = mode === "compact" ? " compact" : " detailed";
+        return base + done + priority + density;
+    }, [task.completed, task.high, mode]);
+
     return (
-        <li
-            className={`task-item ${completed ? "completed" : ""} ${priority}-priority`}
-        >
-            <div className="task-left">
+        <li className={className}>
+            <label className="checkbox">
                 <input
                     type="checkbox"
-                    checked={completed}
-                    onChange={() => onComplete(id)}
+                    checked={task.completed}
+                    onChange={() => onToggleComplete(task.id)}
                 />
-                <div className="task-info">
-                    <span className="task-title">{title}</span>
-                    {mode === "detailed" && (
-                        <span className="task-details">
-              Prioridad: {priority.toUpperCase()} • Creada:{" "}
-                            {new Date(createdAt).toLocaleString()}
-            </span>
-                    )}
-                </div>
-            </div>
+                <span className="text">{task.text}</span>
+            </label>
 
-            <button className="btn-delete" onClick={() => onDelete(id)}>
-                Eliminar
-            </button>
+            <div className="actions">
+                {task.high && <span className="badge">Alta</span>}
+                <button className="btn secondary" onClick={() => onDelete(task.id)}>
+                    Eliminar
+                </button>
+            </div>
         </li>
     );
 }
 
-TaskItemBase.propTypes = {
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-    priority: PropTypes.oneOf(["low", "medium", "high"]).isRequired,
-    createdAt: PropTypes.number.isRequired,
-    onComplete: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
-};
-
-const TaskItem = React.memo(TaskItemBase);
+// React.memo → re-renderiza solo si cambian sus props (task, handlers)
+const TaskItem = memo(TaskItemBase);
 export default TaskItem;

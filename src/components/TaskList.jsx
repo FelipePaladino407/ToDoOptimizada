@@ -1,42 +1,19 @@
-import React from "react";
+import TaskItem from "./TaskItem.jsx";
 
-const TaskList = ({ tasks, toggleTask, deleteTask }) => {
-    if (!tasks || tasks.length === 0) {
-        return (
-            <div>
-                No hay tareas para mostrar
-            </div>
-        );
+export default function TaskList({ todos, onToggleComplete, onDelete }) {
+    if (!todos.length) {
+        return <p className="muted">No hay tareas que mostrar.</p>;
     }
-
-
     return (
-        <div>
-            {tasks.map(task => (
-                <div key={task.id}>
-                    <div>
-                        <span className={task.completed ? 'completed' : ''}>
-                            {task.text}
-                        </span>
-                        <small>
-                            prioridad: {task.priority} |
-                            Creado: {new Date(task.createdAt).toLocaleDateString()}
-                        </small>
-                    </div>
-
-                    <div>
-                        <button onClick={() => toggleTask(task.id)}>
-                            {task.completed ? 'Desmarcar' : 'Completar'}
-                        </button>
-
-                        <button onClick={() => deleteTask(task.id)}>
-                            Eliminar
-                        </button>
-                    </div>
-                </div>
+        <ul className="task-list">
+            {todos.map((t) => (
+                <TaskItem
+                    key={t.id}
+                    task={t}
+                    onToggleComplete={onToggleComplete}
+                    onDelete={onDelete}
+                />
             ))}
-        </div>
+        </ul>
     );
-};
-
-export default TaskList;
+}
